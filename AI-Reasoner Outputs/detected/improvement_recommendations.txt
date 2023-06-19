@@ -1,0 +1,85 @@
+This section will explain the possible processes for improving the detection performance. However, the possible improvement solutions are flexible and not limited.
+Generally, increasing dataset will improve the detection performance
+----------
+Size:
+1. Increase dataset amount of the corresponding sized defect
+2. Enlarge the defect area
+Coverage:
+1. Improve detection model architecture
+2. Suitable image augmentations
+Aspect Ratio:
+1. Improve detection model architecture
+2. Suitable image augmentations
+3. Normalise aspect ratio
+Average Vertex Degree:
+1. Improve detection model architecture
+2. Increase image features
+Mode Vertex Degree:
+1. Improve detection model architecture
+2. Increase image features
+Number of Edge:
+1. Suitable image augmentations
+2. Improve detection model architecture
+Average Edge Length:
+1. Suitable image augmentations
+2. Improve detection model architecture
+Mode Edge Length:
+1. Suitable image augmentations
+2. Improve detection model architecture
+Neighbour Distance:
+1. Separate neighbour defect to individual image if mis-classification happen with closed neighbour
+2. Increase dataset of similar situation
+Shape Complexity (Edge Ratio, Follow Turn, Small Turn, Reverse Turn):
+1. Suitable image augmentations
+2. Improve detection model architecture
+3. Increase image features
+4. Increase dataset
+Average HUE:
+1. Increase dataset
+Mode HUE:
+1. Increase dataset
+HUE Range:
+1. Normalise colour
+2. Improve detection model architecture
+Number of Unique HUE:
+1. Normalise colour
+2. Improve detection model architecture
+3. Grey-scale image if value is large
+Average Saturation:
+1. Increase dataset
+2. Grey-scale image if value is large
+Mode Saturation:
+1. Increase dataset
+2. Grey-scale image if value is large
+Saturation Range:
+1. Normalise colour
+2. Grey-scale image if value is large
+Number of Unique Saturation:
+n1. Normalise colour
+2. Improve detection model architecture
+3. Grey-scale image if value is large
+Average Brightness:
+1. Increase dataset
+2. Suitable image pre-processing
+Mode Brightness:
+1. Increase dataset
+2. Suitable image pre-processing
+Brightness Range:
+1. Normalise colour
+Number of Unique Brightness:
+1. Normalise colour
+Colour Complexity (HUE, Saturation, and Brightness):
+1. Normalise histogram of the image
+2. Improve detection model architecture
+Mode Hue (Outside):
+1. Normalise colour
+2. Increase dataset
+3. Improve detection model architecture
+ Mode Saturation (Outside):
+1. Normalise colour
+2. Increase dataset
+3. Adjust contrast or histogram
+Mode Brightness (Outside):
+1. Normalise colour
+2. Increase dataset
+3. Adjust contrast or histogram

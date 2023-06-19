@@ -1,0 +1,9 @@
+					target non-target
+detected: 			100 	100
+not-detected: 		100 	100
+false-positve:		0		100
+iou-less-0.5:		100		100
+merged-detected:	100 	100
+separate-detected:	100 	100
+correct-type:		100		100
+not-correct-type:	100		100
