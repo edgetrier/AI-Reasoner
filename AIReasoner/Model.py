@@ -116,38 +116,20 @@ def check_data():
 # Output: Trained model:sklearn
 #         Evaluation matrix:[[tp,fp],[fn,tn]]
 #         Error feature:[feature name]
-def plant_trees(feature_name, n_tree=1, criterion="gini", reverse=False, seeds=None):
+def plant_trees(n_tree=1, criterion="gini", reverse=False, seeds=None):
     global Feature_Data, Label_Data, rev
     check_data()
 
     rev = reverse
 
     models = []
-    evaluation = []
-    errors = []
     # dt = DTC(criterion=criterion, splitter="random", max_features=1, max_depth=None, random_state=seeds)
     for i in tqdm(range(n_tree), desc="Plant trees"):
         # dt_c = clone(dt)
         dt_c = DTC(criterion=criterion, splitter="random", max_features=1, max_depth=None, random_state=random.randint(3333,6666))
         dt_m = dt_c.fit(Feature_Data, Label_Data)
-        error = []
-        predict = dt_m.predict(Feature_Data)
-        for j in range(len(predict)):
-            if predict[j] != Label_Data[j]:
-                node_id = dt_m.apply([Feature_Data[i]])[0]
-                if node_id in dt_m.tree_.children_left:
-                    node_id = np.where(dt_m.tree_.children_left == node_id)
-                elif node_id in dt_m.tree_.children_right:
-                    node_id = np.where(dt_m.tree_.children_right == node_id)
-                else:
-                    continue
-                wrong_feature = int(dt_m.tree_.feature[node_id])
-                if feature_name[wrong_feature] not in error:
-                    error.append(feature_name[wrong_feature])
-        errors.append(error)
-        evaluation.append(CM(Label_Data, predict))
         models.append(dt_m)
-    return models, evaluation, errors
+    return models
 
 
 # Find all routes from the trees
@@ -257,19 +239,31 @@ def climb_trees(model, feature_name):
 #        Class Importance:[1,1]- class weight
 # Output: Validation:Boolean - is tree satisfied to continue
 #         Score list:List() - good score, T score and range, F score and range
-def val_trees(tree_eval, pass_rate=0.95, class_importance=None):
+def val_trees(model, feature_name, pass_rate=0.95):
     global rev, val_rate
-    if class_importance is None:
-        class_importance = [1 for _ in tree_eval[0][0]]
-    else:
-        if len(class_importance) != len(tree_eval[0][0]):
-            raise ValueError(
-                "Class importance does not match with test label. Expecting: {0}".format(len(tree_eval[0][0])))
     t0_prec = []
     t1_prec = []
     good = 0
-    for i in tqdm(tree_eval, desc="Validate trees"):
+    errors = []
 
+    for m in tqdm(model, desc="Validate trees"):
+        error = []
+        predict = m.predict(Feature_Data)
+        for j in range(len(predict)):
+            if predict[j] != Label_Data[j]:
+                node_id = m.apply([Feature_Data[j]])[0]
+                if node_id in m.tree_.children_left:
+                    node_id = np.where(m.tree_.children_left == node_id)
+                elif node_id in m.tree_.children_right:
+                    node_id = np.where(m.tree_.children_right == node_id)
+                else:
+                    continue
+                wrong_feature = int(m.tree_.feature[node_id])
+                if feature_name[wrong_feature] not in error:
+                    error.append(feature_name[wrong_feature])
+        errors.append(error)
+
+        i = CM(Label_Data, predict)
         t0_pr = 0
         if i[0][0] == 0:
             t0_prec.append(0.0)
@@ -287,14 +281,15 @@ def val_trees(tree_eval, pass_rate=0.95, class_importance=None):
             t1_pr = i[-1][-1] / sum(i[1])
             t1_prec.append(t1_pr)
 
-        good += t0_pr * class_importance[0] / sum(class_importance)
-        good += t1_pr * class_importance[1] / sum(class_importance)
+        good += t0_pr * 0.5
+        good += t1_pr * 0.5
+
 
     t0_avg = sum(t0_prec) / len(t0_prec)
     t1_avg = sum(t1_prec) / len(t1_prec)
     t0_range = max(t0_prec) - min(t0_prec)
     t1_range = max(t1_prec) - min(t1_prec)
-    good_rate = good / len(tree_eval)
+    good_rate = good / len(model)
 
     if rev:
         logging.info("Reversed prediction enable, change result 0 to 1")
@@ -317,7 +312,7 @@ def val_trees(tree_eval, pass_rate=0.95, class_importance=None):
         logging.warning(
             "Validation rate is lower than the pass requirements. Required: {0};  Current: {1}".format(
                 pass_rate, round(good_rate, 3)))
-        return False, [good_rate, (t0_avg, t0_range), (t1_avg, t1_range)]
+        return False, [good_rate, (t0_avg, t0_range), (t1_avg, t1_range)], errors
 
 
 # Find the node's children node ids
