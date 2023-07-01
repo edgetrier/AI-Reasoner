@@ -61,8 +61,8 @@ id_list, feature, data, result = M.convert2List(label, FE.feature_list, predicti
 M.load_feature_data(data)
 
 # Start train AI-Reasoner
-# for target in result.keys():
-for target in ["wrong-type-classified"]:
+for target in result.keys():
+
 
     target_test = result[target]
     M.load_label_data(target_test, target)
