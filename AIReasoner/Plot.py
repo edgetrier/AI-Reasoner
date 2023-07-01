@@ -3617,7 +3617,7 @@ def st_bar_plot(ax, rang, range_stable, stable_warn=0.05, dc_name=None, overall=
     return ax
 
 
-def model_plot(report, feature, route, folder_path, top_route=5, range_split=True, detail=True):
+def explain_forest(report, feature, route, folder_path, top_route=5, range_split=True, detail=True):
 
     realpath = os.path.realpath(folder_path)+"/"
     if not os.path.exists(realpath):

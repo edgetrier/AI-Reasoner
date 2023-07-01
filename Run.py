@@ -67,15 +67,15 @@ for target in ["wrong-type-classified"]:
     target_test = result[target]
     M.load_label_data(target_test, target)
 
-    model, evaluation, error = M.plant_trees(n_tree=200, reverse=False)
+    model, evaluation, error = M.plant_forest(n_tree=200, reverse=False)
 
-    good_tree, scores, error = M.val_trees(model, feature)
+    good_tree, scores, error = M.val_forest(model, feature)
 
-    path, node, route = M.climb_trees(model, feature_name=feature)
+    path, node, route = M.climb_forest(model, feature_name=feature)
 
-    tree_result = M.analyse_trees(path, node, error, feature, round_num=4)
+    tree_result = M.analyse_forest(path, node, error, feature, round_num=4)
 
-    report, route_1, route_0, node = M.summary_trees(tree_result, feature, route, node, FE.get_FeatureRange())
+    report, route_1, route_0, node = M.summary_forest(tree_result, feature, route, node, FE.get_FeatureRange())
 
-    AIplot.model_plot(report, feature, route_1, "./test_folder/"+target, range_split=True, detail=True)
+    AIplot.explain_forest(report, feature, route_1, "./test_folder/"+target, range_split=True, detail=True)
 

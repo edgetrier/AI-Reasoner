@@ -116,7 +116,7 @@ def check_data():
 # Output: Trained model:sklearn
 #         Evaluation matrix:[[tp,fp],[fn,tn]]
 #         Error feature:[feature name]
-def plant_trees(n_tree=1, criterion="gini", reverse=False, seeds=None):
+def plant_forest(n_tree=1, criterion="gini", reverse=False, seeds=None):
     global Feature_Data, Label_Data, rev
     check_data()
 
@@ -221,7 +221,7 @@ def climb_tree(tree):
 # Output: Path:List() - tree paths and node condition
 #         Node:Dict() - tree nodes and relevant information
 #         Route:List() - tree routes based on path
-def climb_trees(model, feature_name):
+def climb_forest(model, feature_name):
     routes = []
     nodes = []
     paths = []
@@ -239,7 +239,7 @@ def climb_trees(model, feature_name):
 #        Class Importance:[1,1]- class weight
 # Output: Validation:Boolean - is tree satisfied to continue
 #         Score list:List() - good score, T score and range, F score and range
-def val_trees(model, feature_name, pass_rate=0.95):
+def val_forest(model, feature_name, pass_rate=0.95):
     global rev, val_rate
     t0_prec = []
     t1_prec = []
@@ -407,7 +407,7 @@ def degree_status(value, threshold):
 #        degree_threshold - distinguish degree boundary
 #        own_result
 # Output: Result:Dict(): for each tree for each feature and result
-def analyse_trees(path, node, error, feature, round_num=0, degree_threshold=(0.25, 0.5), own_result=None):
+def analyse_forest(path, node, error, feature, round_num=0, degree_threshold=(0.25, 0.5), own_result=None):
     global rev
 
     tree_result = []
@@ -684,7 +684,7 @@ def c_s_overall(count, score, c_s):
 #         Mis-classification routes
 #         Classification routes
 #         Node
-def summary_trees(tree_result, feature, route, node, feature_range, feature_weight="balance", status_bonus=None,
+def summary_forest(tree_result, feature, route, node, feature_range, feature_weight="balance", status_bonus=None,
                   degree_bonus=None, mistake_punish=2, all_positive=True, own_result=None, top_n=10, c_s=None):
     global rev
     if c_s is None:
@@ -1000,7 +1000,7 @@ def feature_explain(left, right, f_name, f_desc, f_range):
 #        Stable move:Float - default:0.75 - Drawing a flexible range with discount/bonus move based on the stability
 #        Save - save the text into a txt file
 # Output: Text-based report:String
-def explain_tree(report, route_1, route_0, node, feature_range, route_top=5, stable_warn=0.05, save=None):
+def explain_forest(report, route_1, route_0, node, feature_range, route_top=5, stable_warn=0.05, save=None):
     global rev, val_rate, target
 
     target_desc = {"detection": "correct detection results",
@@ -1456,7 +1456,7 @@ def explain_tree(report, route_1, route_0, node, feature_range, route_top=5, sta
 #        Stable move:Float - default:0.75 - Drawing a flexible range with discount/bonus move based on the stability
 #        Save - save the text into a txt file
 # Output: Text-based report:String
-def explain_tree_old(report, route_1, route_0, node, feature_range, route_top=5, stable_move=0.75, save=None):
+def explain_forest_old(report, route_1, route_0, node, feature_range, route_top=5, stable_move=0.75, save=None):
     global rev, val_rate
 
     output_text = "AI Reasoner Report\n\n"
