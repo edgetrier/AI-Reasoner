@@ -1,0 +1,9 @@
+opencv-python
+tqdm
+numpy
+pillow
+shapely
+scipy
+matplotlib
+scikit-learn
+polygenerator
